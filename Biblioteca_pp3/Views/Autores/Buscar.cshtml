@@ -1,0 +1,60 @@
+﻿@model Biblioteca_pp3.ViewModels.BusquedaAutorViewModel
+
+@{
+    ViewData["Title"] = "Buscar Autor";
+}
+
+<h1>Búsqueda de Autores</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Buscar" method="post">
+            <div class="form-group">
+                <label asp-for="TerminoBusqueda" class="control-label">Buscar autor:</label>
+                <input asp-for="TerminoBusqueda" class="form-control" placeholder="Ingrese nombre o apellido del autor" />
+                <span asp-validation-for="TerminoBusqueda" class="text-danger"></span>
+            </div>
+            <div class="form-group mt-2">
+                <input type="submit" value="Buscar" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Resultados != null && Model.Resultados.Any())
+{
+    <h4 class="mt-4">Resultados de la búsqueda</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var autor in Model.Resultados)
+            {
+                <tr>
+                    <td>@autor.Nombre</td>
+                    <td>@autor.Apellido</td>
+                    <td>@autor.FechaNac.ToShortDateString()</td>
+                    <td>
+                        <a asp-action="LibrosAutor" asp-route-id="@autor.AutorId" class="btn btn-info btn-sm">Ver Libros</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else if (Model.TerminoBusqueda != null)
+{
+    <div class="alert alert-info mt-4">No se encontraron autores con los criterios de búsqueda.</div>
+}
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

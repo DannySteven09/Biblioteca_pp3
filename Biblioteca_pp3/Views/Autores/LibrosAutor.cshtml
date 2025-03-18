@@ -1,0 +1,66 @@
+﻿@model Biblioteca_pp3.ViewModels.LibrosAutorViewModel
+
+@{
+    ViewData["Title"] = "Libros del Autor";
+}
+
+<h1>Libros de @(Model.Autor?.NombreCompleto ?? "Autor")</h1>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h4>Información del Autor</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Autor != null)
+                {
+                    <p><strong>Nombre:</strong> @Model.Autor.Nombre</p>
+                    <p><strong>Apellido:</strong> @Model.Autor.Apellido</p>
+                    <p><strong>Fecha de Nacimiento:</strong> @Model.Autor.FechaNac.ToShortDateString()</p>
+                }
+                else
+                {
+                    <p>Información del autor no disponible</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<h4>Libros publicados</h4>
+
+@if (Model.Libros != null && Model.Libros.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Fecha de Publicación</th>
+                <th>ISBN</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var libro in Model.Libros)
+            {
+                <tr>
+                    <td>@libro.Titulo</td>
+                    <td>@libro.FechaPub.ToShortDateString()</td>
+                    <td>@libro.ISBN</td>
+                    <td>
+                        <a asp-controller="Libros" asp-action="Details" asp-route-id="@libro.LibroId" class="btn btn-info btn-sm">Detalles</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">Este autor no tiene libros registrados.</div>
+}
+
+<div>
+    <a asp-action="Buscar" class="btn btn-secondary">Volver a Búsqueda</a>
+</div>
